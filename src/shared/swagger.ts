@@ -10,6 +10,7 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       { url: 'http://localhost:3001', description: 'Development' },
+      { url: 'https://loura-subfalcial-dilatometrically.ngrok-free.dev', description: 'Remote (ngrok)' },
     ],
     components: {
       securitySchemes: {

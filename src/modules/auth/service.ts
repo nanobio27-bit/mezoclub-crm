@@ -121,3 +121,95 @@ export async function getProfile(userId: number): Promise<Omit<User, 'password_h
   );
   return result.rows[0] || null;
 }
+
+export async function listUsers(): Promise<Omit<User, 'password_hash'>[]> {
+  const result = await query(
+    'SELECT id, email, name, role, is_active, created_at, updated_at FROM users ORDER BY id'
+  );
+  return result.rows;
+}
+
+export async function createUser(input: {
+  email: string;
+  password: string;
+  name: string;
+  role?: string;
+}): Promise<Omit<User, 'password_hash'>> {
+  const existing = await query('SELECT id FROM users WHERE email = $1', [input.email]);
+  if (existing.rows.length > 0) {
+    throw ApiError.conflict('Email already registered');
+  }
+
+  const passwordHash = await bcrypt.hash(input.password, 10);
+  const result = await query(
+    'INSERT INTO users (email, password_hash, name, role) VALUES ($1, $2, $3, $4) RETURNING id, email, name, role, is_active, created_at, updated_at',
+    [input.email, passwordHash, input.name, input.role || 'manager']
+  );
+  return result.rows[0];
+}
+
+export async function updateUser(
+  userId: number,
+  updates: { name?: string; email?: string; role?: string; is_active?: boolean }
+): Promise<Omit<User, 'password_hash'>> {
+  const fields: string[] = [];
+  const values: any[] = [];
+  let paramIndex = 1;
+
+  if (updates.name !== undefined) {
+    fields.push(`name = $${paramIndex++}`);
+    values.push(updates.name);
+  }
+  if (updates.email !== undefined) {
+    fields.push(`email = $${paramIndex++}`);
+    values.push(updates.email);
+  }
+  if (updates.role !== undefined) {
+    fields.push(`role = $${paramIndex++}`);
+    values.push(updates.role);
+  }
+  if (updates.is_active !== undefined) {
+    fields.push(`is_active = $${paramIndex++}`);
+    values.push(updates.is_active);
+  }
+
+  if (fields.length === 0) {
+    throw ApiError.badRequest('No fields to update');
+  }
+
+  fields.push(`updated_at = NOW()`);
+  values.push(userId);
+
+  const result = await query(
+    `UPDATE users SET ${fields.join(', ')} WHERE id = $${paramIndex} RETURNING id, email, name, role, is_active, created_at, updated_at`,
+    values
+  );
+
+  if (result.rows.length === 0) {
+    throw ApiError.notFound('User not found');
+  }
+
+  return result.rows[0];
+}
+
+export async function changePassword(
+  userId: number,
+  currentPassword: string,
+  newPassword: string
+): Promise<void> {
+  const result = await query('SELECT password_hash FROM users WHERE id = $1', [userId]);
+  if (result.rows.length === 0) {
+    throw ApiError.notFound('User not found');
+  }
+
+  const valid = await bcrypt.compare(currentPassword, result.rows[0].password_hash);
+  if (!valid) {
+    throw ApiError.unauthorized('Current password is incorrect');
+  }
+
+  const newHash = await bcrypt.hash(newPassword, 10);
+  await query('UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2', [
+    newHash,
+    userId,
+  ]);
+}

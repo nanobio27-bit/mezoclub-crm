@@ -10,6 +10,9 @@ import clientRoutes from '../modules/clients/routes';
 import productRoutes from '../modules/products/routes';
 import orderRoutes from '../modules/orders/routes';
 import dashboardRoutes from '../modules/dashboard/routes';
+import gincoinRoutes from '../modules/gincoin/routes';
+import ratingRoutes from '../modules/rating/routes';
+import kpiRoutes from '../modules/kpi/routes';
 
 const app = express();
 
@@ -26,6 +29,9 @@ app.use('/api/clients', clientRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/gincoin', gincoinRoutes);
+app.use('/api/rating', ratingRoutes);
+app.use('/api/kpi', kpiRoutes);
 
 // Health check
 app.get('/health', (_req, res) => {

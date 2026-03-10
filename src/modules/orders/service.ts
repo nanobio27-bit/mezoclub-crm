@@ -1,6 +1,7 @@
 import { query, pool } from '../../shared/database/pool';
 import { ApiError } from '../../shared/types/api-error';
 import { CreateOrderInput, Order, OrderItem } from './types';
+import { awardOrderGinCoins } from '../gincoin/service';
 
 export async function createOrder(userId: number, input: CreateOrderInput): Promise<Order & { items: OrderItem[] }> {
   const client = await pool.connect();
@@ -56,6 +57,28 @@ export async function createOrder(userId: number, input: CreateOrderInput): Prom
     }
 
     await client.query('COMMIT');
+
+    // Award GinCoins after successful order (outside transaction)
+    try {
+      const clientRes = await query(
+        'SELECT personal_discount FROM clients WHERE id = $1',
+        [input.client_id]
+      );
+      const personalDiscount = clientRes.rows[0]
+        ? parseFloat(clientRes.rows[0].personal_discount)
+        : 10;
+
+      await awardOrderGinCoins(
+        order.id,
+        input.client_id,
+        userId,
+        finalAmount,
+        personalDiscount
+      );
+    } catch (ginErr) {
+      console.error('Failed to award GinCoins for order', order.id, ginErr);
+    }
+
     return { ...order, items: orderItems };
   } catch (err) {
     await client.query('ROLLBACK');

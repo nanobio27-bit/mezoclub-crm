@@ -88,6 +88,35 @@ CREATE INDEX idx_products_sku ON products(sku) WHERE deleted_at IS NULL;
 CREATE INDEX idx_refresh_tokens_user ON refresh_tokens(user_id, is_revoked);
 CREATE INDEX idx_refresh_tokens_hash ON refresh_tokens(token_hash) WHERE is_revoked = false;
 
+-- GinCoin wallets
+CREATE TABLE gincoin_wallets (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    balance DECIMAL(12,2) DEFAULT 0,
+    total_earned DECIMAL(12,2) DEFAULT 0,
+    total_spent DECIMAL(12,2) DEFAULT 0,
+    level VARCHAR(20) DEFAULT 'newcomer',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE UNIQUE INDEX idx_gincoin_wallets_user ON gincoin_wallets(user_id);
+
+-- GinCoin transactions
+CREATE TABLE gincoin_transactions (
+    id SERIAL PRIMARY KEY,
+    wallet_id INTEGER REFERENCES gincoin_wallets(id) ON DELETE CASCADE,
+    type VARCHAR(20) NOT NULL,
+    amount DECIMAL(12,2) NOT NULL,
+    source VARCHAR(50),
+    reference_id INTEGER,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_gincoin_tx_wallet ON gincoin_transactions(wallet_id, created_at DESC);
+
+-- Add personal_discount to clients
+ALTER TABLE clients ADD COLUMN personal_discount DECIMAL(5,2) DEFAULT 10;
+
 -- Seed admin user (password: admin123)
 INSERT INTO users (email, password_hash, name, role)
 VALUES ('admin@mezoclub.com', '$2a$10$DMNypsEzxfWyBTy4wNFw.OQuQOoJrB3fvgfJjxp286mHAWIHFyi..', 'Admin', 'admin');
