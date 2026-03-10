@@ -1,0 +1,137 @@
+{
+  "common": {
+    "appName": "MezoClub CRM",
+    "motto": "Time to Live",
+    "mottoFull": "Час жити",
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "delete": "Видалити",
+    "edit": "Редагувати",
+    "create": "Створити",
+    "search": "Пошук...",
+    "loading": "Завантаження...",
+    "noData": "Немає даних",
+    "confirm": "Підтвердити",
+    "back": "Назад",
+    "actions": "Дії",
+    "yes": "Так",
+    "no": "Ні",
+    "all": "Усі",
+    "total": "Разом",
+    "filter": "Фільтр",
+    "reset": "Скинути",
+    "showing": "Показано {{from}}-{{to}} з {{total}}",
+    "currency": "₴",
+    "confirmDelete": "Ви впевнені що хочете видалити?",
+    "savedSuccess": "Збережено успішно",
+    "deletedSuccess": "Видалено успішно",
+    "errorOccurred": "Сталася помилка"
+  },
+  "auth": {
+    "login": "Увійти",
+    "logout": "Вийти",
+    "email": "Email",
+    "password": "Пароль",
+    "loginTitle": "Вхід до MezoClub CRM",
+    "invalidCredentials": "Невірний email або пароль"
+  },
+  "nav": {
+    "dashboard": "Головна",
+    "clients": "Клієнти",
+    "orders": "Замовлення",
+    "products": "Товари",
+    "marketing": "Маркетинг",
+    "logistics": "Логістика",
+    "finance": "Фінанси",
+    "settings": "Налаштування"
+  },
+  "dashboard": {
+    "title": "Головна",
+    "greeting": "Доброго дня, {{name}}",
+    "todayRevenue": "Виручка сьогодні",
+    "activeOrders": "Замовлень в роботі",
+    "activeClients": "Активних клієнтів",
+    "lowStock": "Мало на складі",
+    "recentOrders": "Останні замовлення",
+    "topProducts": "Топ товарів",
+    "ordersByStatus": "Замовлення за статусами"
+  },
+  "clients": {
+    "title": "Клієнти",
+    "create": "Створити клієнта",
+    "name": "Ім'я / Назва",
+    "company": "Компанія",
+    "phone": "Телефон",
+    "email": "Email",
+    "city": "Місто",
+    "type": "Тип",
+    "status": "Статус",
+    "manager": "Менеджер",
+    "notes": "Нотатки",
+    "totalOrders": "Замовлень",
+    "totalRevenue": "Виручка",
+    "types": {
+      "clinic": "Клініка",
+      "cosmetologist": "Косметолог",
+      "distributor": "Дистриб'ютор"
+    },
+    "statuses": {
+      "new": "Новий",
+      "active": "Активний",
+      "inactive": "Неактивний",
+      "lost": "Втрачений"
+    }
+  },
+  "products": {
+    "title": "Товари",
+    "create": "Додати товар",
+    "name": "Назва",
+    "sku": "Артикул",
+    "brand": "Бренд",
+    "category": "Категорія",
+    "price": "Ціна",
+    "stock": "Залишок",
+    "minStock": "Мін. залишок",
+    "lowStockWarning": "Низький залишок!",
+    "outOfStock": "Немає в наявності"
+  },
+  "orders": {
+    "title": "Замовлення",
+    "create": "Створити замовлення",
+    "orderNumber": "Номер",
+    "client": "Клієнт",
+    "manager": "Менеджер",
+    "status": "Статус",
+    "paymentStatus": "Оплата",
+    "total": "Разом",
+    "items": "Позиції",
+    "addItem": "Додати товар",
+    "quantity": "К-сть",
+    "unitPrice": "Ціна за од.",
+    "changeStatus": "Змінити статус",
+    "statuses": {
+      "new": "Новий",
+      "confirmed": "Підтверджено",
+      "in_production": "У виробництві",
+      "ready": "Готовий до відвантаження",
+      "shipped": "Відправлено",
+      "delivered": "Доставлено",
+      "completed": "Виконано",
+      "cancelled": "Скасовано",
+      "returned": "Повернення"
+    },
+    "paymentStatuses": {
+      "pending": "Очікує оплати",
+      "partial": "Частково сплачено",
+      "paid": "Сплачено",
+      "overdue": "Прострочено"
+    }
+  },
+  "errors": {
+    "AUTH_INVALID_CREDENTIALS": "Невірний email або пароль",
+    "AUTH_TOKEN_EXPIRED": "Сесія закінчилася",
+    "AUTH_FORBIDDEN": "Немає доступу",
+    "NOT_FOUND": "Не знайдено",
+    "INTERNAL_ERROR": "Помилка сервера"
+  }
+}

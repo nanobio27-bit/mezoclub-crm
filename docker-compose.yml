@@ -1,0 +1,49 @@
+# docker-compose.yml
+# Запускает PostgreSQL и Redis одной командой: docker-compose up -d
+#
+# Что это значит для Владимира:
+# PostgreSQL — это база данных, где хранятся клиенты, заказы, товары
+# Redis — это быстрая "записная книжка" для сессий и кэша
+# Docker — это способ запустить их без установки на компьютер
+
+version: '3.8'
+
+services:
+  # === База данных ===
+  db:
+    image: postgres:16-alpine
+    container_name: mezoclub-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: mezoclub_crm
+      POSTGRES_USER: mezoclub
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-mezoclub_dev_2026}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d  # Автоматически выполнит миграции
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mezoclub -d mezoclub_crm"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # === Кэш и сессии ===
+  redis:
+    image: redis:7-alpine
+    container_name: mezoclub-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+  redisdata:

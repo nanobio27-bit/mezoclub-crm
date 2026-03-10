@@ -1,0 +1,137 @@
+{
+  "common": {
+    "appName": "MezoClub CRM",
+    "motto": "Time to Live",
+    "mottoFull": "Время жить",
+    "save": "Сохранить",
+    "cancel": "Отменить",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "create": "Создать",
+    "search": "Поиск...",
+    "loading": "Загрузка...",
+    "noData": "Нет данных",
+    "confirm": "Подтвердить",
+    "back": "Назад",
+    "actions": "Действия",
+    "yes": "Да",
+    "no": "Нет",
+    "all": "Все",
+    "total": "Итого",
+    "filter": "Фильтр",
+    "reset": "Сбросить",
+    "showing": "Показано {{from}}-{{to}} из {{total}}",
+    "currency": "₴",
+    "confirmDelete": "Вы уверены что хотите удалить?",
+    "savedSuccess": "Сохранено успешно",
+    "deletedSuccess": "Удалено успешно",
+    "errorOccurred": "Произошла ошибка"
+  },
+  "auth": {
+    "login": "Войти",
+    "logout": "Выйти",
+    "email": "Email",
+    "password": "Пароль",
+    "loginTitle": "Вход в MezoClub CRM",
+    "invalidCredentials": "Неверный email или пароль"
+  },
+  "nav": {
+    "dashboard": "Главная",
+    "clients": "Клиенты",
+    "orders": "Заказы",
+    "products": "Товары",
+    "marketing": "Маркетинг",
+    "logistics": "Логистика",
+    "finance": "Финансы",
+    "settings": "Настройки"
+  },
+  "dashboard": {
+    "title": "Главная",
+    "greeting": "Добрый день, {{name}}",
+    "todayRevenue": "Выручка сегодня",
+    "activeOrders": "Заказов в работе",
+    "activeClients": "Активных клиентов",
+    "lowStock": "Мало на складе",
+    "recentOrders": "Последние заказы",
+    "topProducts": "Топ товаров",
+    "ordersByStatus": "Заказы по статусам"
+  },
+  "clients": {
+    "title": "Клиенты",
+    "create": "Создать клиента",
+    "name": "Имя / Название",
+    "company": "Компания",
+    "phone": "Телефон",
+    "email": "Email",
+    "city": "Город",
+    "type": "Тип",
+    "status": "Статус",
+    "manager": "Менеджер",
+    "notes": "Заметки",
+    "totalOrders": "Заказов",
+    "totalRevenue": "Выручка",
+    "types": {
+      "clinic": "Клиника",
+      "cosmetologist": "Косметолог",
+      "distributor": "Дистрибьютор"
+    },
+    "statuses": {
+      "new": "Новый",
+      "active": "Активный",
+      "inactive": "Неактивный",
+      "lost": "Потерянный"
+    }
+  },
+  "products": {
+    "title": "Товары",
+    "create": "Добавить товар",
+    "name": "Название",
+    "sku": "Артикул",
+    "brand": "Бренд",
+    "category": "Категория",
+    "price": "Цена",
+    "stock": "Остаток",
+    "minStock": "Мин. остаток",
+    "lowStockWarning": "Низкий остаток!",
+    "outOfStock": "Нет в наличии"
+  },
+  "orders": {
+    "title": "Заказы",
+    "create": "Создать заказ",
+    "orderNumber": "Номер",
+    "client": "Клиент",
+    "manager": "Менеджер",
+    "status": "Статус",
+    "paymentStatus": "Оплата",
+    "total": "Итого",
+    "items": "Позиции",
+    "addItem": "Добавить товар",
+    "quantity": "Кол-во",
+    "unitPrice": "Цена за ед.",
+    "changeStatus": "Изменить статус",
+    "statuses": {
+      "new": "Новый",
+      "confirmed": "Подтверждён",
+      "in_production": "В производстве",
+      "ready": "Готов к отгрузке",
+      "shipped": "Отправлен",
+      "delivered": "Доставлен",
+      "completed": "Выполнен",
+      "cancelled": "Отменён",
+      "returned": "Возврат"
+    },
+    "paymentStatuses": {
+      "pending": "Ожидает оплаты",
+      "partial": "Частично оплачен",
+      "paid": "Оплачен",
+      "overdue": "Просрочен"
+    }
+  },
+  "errors": {
+    "AUTH_INVALID_CREDENTIALS": "Неверный email или пароль",
+    "AUTH_TOKEN_EXPIRED": "Сессия истекла",
+    "AUTH_FORBIDDEN": "Нет доступа",
+    "NOT_FOUND": "Не найдено",
+    "INTERNAL_ERROR": "Ошибка сервера"
+  }
+}
