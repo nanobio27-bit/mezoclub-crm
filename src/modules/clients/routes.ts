@@ -18,6 +18,33 @@ const clientSchema = z.object({
   notes: z.string().optional(),
 });
 
+/**
+ * @swagger
+ * /api/clients:
+ *   get:
+ *     tags: [Clients]
+ *     summary: List clients (with search, filter, pagination)
+ *     security: [{ BearerAuth: [] }]
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         schema: { type: string }
+ *       - in: query
+ *         name: status
+ *         schema: { type: string }
+ *       - in: query
+ *         name: segment
+ *         schema: { type: string }
+ *       - in: query
+ *         name: page
+ *         schema: { type: integer, default: 1 }
+ *       - in: query
+ *         name: limit
+ *         schema: { type: integer, default: 50 }
+ *     responses:
+ *       200:
+ *         description: Paginated client list
+ */
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { search, status, segment, page = '1', limit = '50' } = req.query;
@@ -41,6 +68,25 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/clients/{id}:
+ *   get:
+ *     tags: [Clients]
+ *     summary: Get client by ID
+ *     security: [{ BearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema: { $ref: '#/components/schemas/Client' }
+ *       404: { description: Not found }
+ */
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const client = await clientRepository.findById(parseInt(req.params.id, 10));
@@ -51,6 +97,24 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/clients:
+ *   post:
+ *     tags: [Clients]
+ *     summary: Create a new client
+ *     security: [{ BearerAuth: [] }]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema: { $ref: '#/components/schemas/Client' }
+ *     responses:
+ *       201:
+ *         content:
+ *           application/json:
+ *             schema: { $ref: '#/components/schemas/Client' }
+ */
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = clientSchema.parse(req.body);
@@ -61,6 +125,29 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/clients/{id}:
+ *   put:
+ *     tags: [Clients]
+ *     summary: Update client
+ *     security: [{ BearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema: { $ref: '#/components/schemas/Client' }
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema: { $ref: '#/components/schemas/Client' }
+ *       404: { description: Not found }
+ */
 router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = clientSchema.partial().parse(req.body);
@@ -72,6 +159,22 @@ router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/clients/{id}:
+ *   delete:
+ *     tags: [Clients]
+ *     summary: Soft-delete client
+ *     security: [{ BearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200: { description: Deleted }
+ *       404: { description: Not found }
+ */
 router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const deleted = await clientRepository.delete(parseInt(req.params.id, 10));

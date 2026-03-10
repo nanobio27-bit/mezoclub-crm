@@ -17,6 +17,31 @@ const loginSchema = z.object({
   password: z.string().min(1),
 });
 
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Register a new user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password, name]
+ *             properties:
+ *               email: { type: string, format: email }
+ *               password: { type: string, minLength: 6 }
+ *               name: { type: string }
+ *     responses:
+ *       201:
+ *         description: Tokens returned
+ *         content:
+ *           application/json:
+ *             schema: { $ref: '#/components/schemas/TokenPair' }
+ *       409: { description: Email already registered }
+ */
 router.post('/register', authLimiter, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const input = registerSchema.parse(req.body);
@@ -27,6 +52,30 @@ router.post('/register', authLimiter, async (req: Request, res: Response, next: 
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Login with email and password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password]
+ *             properties:
+ *               email: { type: string, format: email }
+ *               password: { type: string }
+ *     responses:
+ *       200:
+ *         description: Tokens returned
+ *         content:
+ *           application/json:
+ *             schema: { $ref: '#/components/schemas/TokenPair' }
+ *       401: { description: Invalid credentials }
+ */
 router.post('/login', authLimiter, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const input = loginSchema.parse(req.body);
@@ -37,6 +86,28 @@ router.post('/login', authLimiter, async (req: Request, res: Response, next: Nex
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/refresh:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Refresh access token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [refreshToken]
+ *             properties:
+ *               refreshToken: { type: string }
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema: { $ref: '#/components/schemas/TokenPair' }
+ *       401: { description: Invalid or expired refresh token }
+ */
 router.post('/refresh', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { refreshToken } = req.body;
@@ -48,6 +119,22 @@ router.post('/refresh', async (req: Request, res: Response, next: NextFunction) 
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Logout and revoke refresh tokens
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken: { type: string }
+ *     responses:
+ *       200: { description: Logged out }
+ */
 router.post('/logout', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { refreshToken } = req.body;
@@ -58,6 +145,17 @@ router.post('/logout', async (req: Request, res: Response, next: NextFunction) =
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     tags: [Auth]
+ *     summary: Get current user profile
+ *     security: [{ BearerAuth: [] }]
+ *     responses:
+ *       200: { description: User profile }
+ *       401: { description: Not authenticated }
+ */
 router.get('/me', authenticate, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const profile = await authService.getProfile(req.user!.userId);
