@@ -132,6 +132,10 @@
     "AUTH_TOKEN_EXPIRED": "Сессия истекла",
     "AUTH_FORBIDDEN": "Нет доступа",
     "NOT_FOUND": "Не найдено",
-    "INTERNAL_ERROR": "Ошибка сервера"
+    "INTERNAL_ERROR": "Ошибка сервера",
+    "NETWORK_ERROR": "Бэкенд недоступен. Запустите: npm run dev",
+    "AUTH_ACCOUNT_DISABLED": "Аккаунт деактивирован",
+    "AUTH_NO_TENANT": "Пользователь не привязан к организации",
+    "VALIDATION_ERROR": "Ошибка валидации данных"
   }
 }

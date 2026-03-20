@@ -36,8 +36,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.setItem('refreshToken', refreshToken);
       set({ user, isAuthenticated: true, isLoading: false });
     } catch (err: unknown) {
-      const errorCode =
-        (err as { response?: { data?: { code?: string } } }).response?.data?.code || 'INTERNAL_ERROR';
+      console.error('[Auth] Login error:', err);
+      const axiosErr = err as { response?: { data?: { code?: string } }; code?: string; message?: string };
+      let errorCode = axiosErr.response?.data?.code || 'INTERNAL_ERROR';
+      // Таймаут или сеть недоступна — бэкенд не запущен
+      if (axiosErr.code === 'ECONNABORTED' || axiosErr.code === 'ERR_NETWORK') {
+        errorCode = 'NETWORK_ERROR';
+      }
       set({ error: errorCode, isLoading: false });
     }
   },

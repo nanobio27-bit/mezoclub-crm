@@ -132,6 +132,10 @@
     "AUTH_TOKEN_EXPIRED": "Сесія закінчилася",
     "AUTH_FORBIDDEN": "Немає доступу",
     "NOT_FOUND": "Не знайдено",
-    "INTERNAL_ERROR": "Помилка сервера"
+    "INTERNAL_ERROR": "Помилка сервера",
+    "NETWORK_ERROR": "Бекенд недоступний. Запустіть: npm run dev",
+    "AUTH_ACCOUNT_DISABLED": "Акаунт деактивовано",
+    "AUTH_NO_TENANT": "Користувач не прив'язаний до організації",
+    "VALIDATION_ERROR": "Помилка валідації даних"
   }
 }
