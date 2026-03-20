@@ -258,11 +258,14 @@ CREATE TRIGGER orders_updated_at BEFORE UPDATE ON orders
 -- ============================================
 -- 8. SEED: MezoClub тенант + владелец
 -- ============================================
--- Тенант уже создан выше (id=1)
 
--- Пароль: MezoClub2026! (bcrypt hash — заменить при первом запуске)
-INSERT INTO users (email, password_hash, name, roles, preferred_language) VALUES 
-    ('owner@mezoclub.com', '$2b$12$placeholder_hash_replace_on_first_run', 'Владимир Барсуков', '{owner,admin}', 'ru');
+-- Создаём тенант MezoClub
+INSERT INTO tenants (name, slug, is_active) VALUES
+    ('MezoClub', 'mezoclub', true);
+
+-- Пароль: MezoClub2026!
+INSERT INTO users (email, password_hash, name, roles, preferred_language) VALUES
+    ('owner@mezoclub.com', '$2b$12$LosU6WDrvSVsDzHbzmEYc.vM7nWSRtB/vfUVNY/54q8iQUEZYlOWK', 'Владимир Барсуков', '{owner,admin}', 'ru');
 
 -- Привязка владельца к тенанту MezoClub
 INSERT INTO user_tenants (user_id, tenant_id, roles, is_default) VALUES 
