@@ -27,15 +27,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
+    <div className="flex min-h-screen items-center justify-center px-4" translate="no">
       <div className="w-full max-w-md">
         {/* Логотип и название */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-[var(--color-accent-primary)]">
-            {t('common.appName')}
+            MezoClub CRM
           </h1>
           <p className="mt-1 text-sm text-gray-400 italic">
-            {t('common.motto')} — {t('common.mottoFull')}
+            Time to Live — Время жить
           </p>
         </div>
 
@@ -54,6 +54,7 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 required
+                autoComplete="username"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-white placeholder-gray-500 outline-none transition focus:border-[var(--color-accent-primary)] focus:ring-1 focus:ring-[var(--color-accent-primary)]"
@@ -69,6 +70,7 @@ export default function LoginPage() {
                 id="password"
                 type="password"
                 required
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-white placeholder-gray-500 outline-none transition focus:border-[var(--color-accent-primary)] focus:ring-1 focus:ring-[var(--color-accent-primary)]"
@@ -78,7 +80,7 @@ export default function LoginPage() {
 
             {/* Ошибка авторизации */}
             {error && (
-              <div className="rounded-lg border border-[var(--color-danger)]/30 bg-[var(--color-danger)]/10 px-4 py-2.5 text-sm text-[var(--color-danger)]">
+              <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-400">
                 {t(`errors.${error}`, { defaultValue: t('common.errorOccurred') })}
               </div>
             )}
@@ -88,7 +90,17 @@ export default function LoginPage() {
               disabled={isLoading}
               className="w-full rounded-lg bg-[var(--color-accent-primary)] px-4 py-2.5 font-medium text-white transition hover:bg-[var(--color-accent-primary)]/80 disabled:opacity-50"
             >
-              {isLoading ? t('common.loading') : t('auth.login')}
+              {isLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  {t('common.loading')}
+                </span>
+              ) : (
+                t('auth.login')
+              )}
             </button>
           </form>
         </div>
@@ -100,6 +112,25 @@ export default function LoginPage() {
             className="text-sm text-gray-500 transition hover:text-gray-300"
           >
             {i18n.language === 'ru' ? 'Українська' : 'Русский'}
+          </button>
+        </div>
+
+        {/* Диагностика */}
+        <div className="mt-6 text-center text-xs text-gray-600">
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                const res = await fetch('/api/health');
+                const data = await res.json();
+                alert('Backend OK: ' + JSON.stringify(data));
+              } catch (err) {
+                alert('Backend НЕДОСТУПЕН! Запустите: npm run dev\n\n' + String(err));
+              }
+            }}
+            className="underline hover:text-gray-400"
+          >
+            {t('common.appName')} — проверить бэкенд
           </button>
         </div>
       </div>
