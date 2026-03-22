@@ -25,6 +25,7 @@ export interface OrderItem {
 export interface CreateOrderInput {
   client_id: number;
   discount_amount?: number;
+  discount_override?: number;
   notes?: string;
   items: { product_id: number; quantity: number }[];
 }

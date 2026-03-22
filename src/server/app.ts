@@ -13,6 +13,7 @@ import dashboardRoutes from '../modules/dashboard/routes';
 import gincoinRoutes from '../modules/gincoin/routes';
 import ratingRoutes from '../modules/rating/routes';
 import kpiRoutes from '../modules/kpi/routes';
+import aiRoutes from '../modules/ai/routes';
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/gincoin', gincoinRoutes);
 app.use('/api/rating', ratingRoutes);
 app.use('/api/kpi', kpiRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Health check
 app.get('/health', (_req, res) => {

@@ -43,7 +43,7 @@ const productSchema = z.object({
  */
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { search, brand, page = '1', limit = '50' } = req.query;
+    const { search, brand, category, page = '1', limit = '50' } = req.query;
 
     if (search) {
       const results = await productRepository.search(search as string);
@@ -52,12 +52,22 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
     const filters: Record<string, any> = {};
     if (brand) filters.brand = brand;
+    if (category) filters.category = category;
 
     const result = await productRepository.findAll(filters, {
       page: parseInt(page as string, 10),
       limit: parseInt(limit as string, 10),
     });
     res.json(result);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/categories', async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const categories = await productRepository.getCategories();
+    res.json({ data: categories });
   } catch (err) {
     next(err);
   }

@@ -16,6 +16,7 @@ const clientSchema = z.object({
   manager_id: z.number().optional(),
   source: z.string().optional(),
   notes: z.string().optional(),
+  personal_discount: z.number().min(0).max(40).optional(),
 });
 
 /**
@@ -149,6 +150,17 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
  *       404: { description: Not found }
  */
 router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = clientSchema.partial().parse(req.body);
+    const client = await clientRepository.update(parseInt(req.params.id, 10), data);
+    if (!client) return res.status(404).json({ error: 'Client not found', code: 'NOT_FOUND' });
+    res.json(client);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = clientSchema.partial().parse(req.body);
     const client = await clientRepository.update(parseInt(req.params.id, 10), data);

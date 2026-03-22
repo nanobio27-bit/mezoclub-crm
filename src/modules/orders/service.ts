@@ -29,7 +29,11 @@ export async function createOrder(userId: number, input: CreateOrderInput): Prom
       items.push({ product_id: item.product_id, quantity: item.quantity, unit_price: unitPrice, total_price: totalPrice });
     }
 
-    const discount = input.discount_amount || 0;
+    // Calculate discount: discount_override is a percentage (0-40), discount_amount is absolute
+    let discount = input.discount_amount || 0;
+    if (input.discount_override && input.discount_override > 0) {
+      discount = Math.round(totalAmount * input.discount_override / 100 * 100) / 100;
+    }
     const finalAmount = totalAmount - discount;
 
     // Create order
@@ -60,13 +64,18 @@ export async function createOrder(userId: number, input: CreateOrderInput): Prom
 
     // Award GinCoins after successful order (outside transaction)
     try {
-      const clientRes = await query(
-        'SELECT personal_discount FROM clients WHERE id = $1',
-        [input.client_id]
-      );
-      const personalDiscount = clientRes.rows[0]
-        ? parseFloat(clientRes.rows[0].personal_discount)
-        : 10;
+      let personalDiscount: number;
+      if (input.discount_override !== undefined) {
+        personalDiscount = input.discount_override;
+      } else {
+        const clientRes = await query(
+          'SELECT personal_discount FROM clients WHERE id = $1',
+          [input.client_id]
+        );
+        personalDiscount = clientRes.rows[0]?.personal_discount
+          ? parseFloat(clientRes.rows[0].personal_discount)
+          : 0;
+      }
 
       await awardOrderGinCoins(
         order.id,

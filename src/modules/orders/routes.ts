@@ -10,6 +10,7 @@ router.use(authenticate);
 const createOrderSchema = z.object({
   client_id: z.number().int().positive(),
   discount_amount: z.number().min(0).optional(),
+  discount_override: z.number().min(0).max(40).optional(),
   notes: z.string().optional(),
   items: z.array(z.object({
     product_id: z.number().int().positive(),
@@ -42,10 +43,11 @@ const createOrderSchema = z.object({
  */
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { status, payment_status, page = '1', limit = '50' } = req.query;
+    const { status, payment_status, client_id, page = '1', limit = '50' } = req.query;
     const filters: Record<string, any> = {};
     if (status) filters.status = status;
     if (payment_status) filters.payment_status = payment_status;
+    if (client_id) filters.client_id = parseInt(client_id as string, 10);
 
     const result = await orderRepository.findAll(filters, {
       page: parseInt(page as string, 10),

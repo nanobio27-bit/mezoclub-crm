@@ -5,6 +5,7 @@ export interface User {
   name: string;
   role: string;
   is_active: boolean;
+  is_ai: boolean;
   created_at: Date;
   updated_at: Date;
 }

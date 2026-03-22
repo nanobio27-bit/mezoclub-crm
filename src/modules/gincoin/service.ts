@@ -57,8 +57,9 @@ export async function addTransaction(
     );
 
     // Update wallet balance and totals
-    const balanceDelta = type === 'earn' ? amount : -amount;
-    const earnDelta = type === 'earn' ? amount : 0;
+    const isEarn = type === 'earn' || type === 'order_bonus';
+    const balanceDelta = isEarn ? amount : -amount;
+    const earnDelta = isEarn ? amount : 0;
     const spentDelta = type === 'spend' ? amount : 0;
 
     const newTotalEarned = parseFloat(String(wallet.total_earned)) + earnDelta;
@@ -116,32 +117,19 @@ export async function getTransactions(
 
 export async function awardOrderGinCoins(
   orderId: number,
-  clientId: number,
+  _clientId: number,
   managerId: number,
   orderTotal: number,
-  personalDiscount: number
+  _personalDiscount: number
 ): Promise<void> {
-  // Award client
-  const clientAmount = Math.round(orderTotal * personalDiscount / 100 * 100) / 100;
-  if (clientAmount > 0) {
-    // Clients are referenced by clients.id, but wallets use users.id
-    // For clients, we use client_id as the user_id in the wallet system
-    await addTransaction(
-      clientId,
-      'earn',
-      clientAmount,
-      'order',
-      orderId,
-      `GinCoins for order #${orderId} (${personalDiscount}% of ${orderTotal})`
-    );
-  }
+  // GinCoin for clients — coming soon (not implemented yet)
 
-  // Award manager
+  // Award manager: total × 10%
   const managerAmount = Math.round(orderTotal * 10 / 100 * 100) / 100;
   if (managerAmount > 0) {
     await addTransaction(
       managerId,
-      'earn',
+      'order_bonus',
       managerAmount,
       'order',
       orderId,
